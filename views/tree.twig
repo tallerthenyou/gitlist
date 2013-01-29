@@ -17,11 +17,31 @@
         {% endblock %}
     {% endembed %}
 
+<script src="/gitlist/web/js/jquery.js"></script>
+<script>
+$(document).ready(function() {
+  $.ajax({
+    type: "GET",
+    {% if parent is null %}
+      url: "{{ path('treedetails', {repo: repo, branch: branch, tree: '.'}) }}"
+    {% else %}
+      url: "{{ path('treedetails', {repo: repo, branch: branch, tree: tree}) }}"
+    {% endif %}
+  }).done(function(details) {
+    for (var i = 0; i < details.length; i++) {
+      $('#' + details[i].hash + '_age').html(details[i].age);
+      $('#' + details[i].hash + '_comment').html(details[i].comment);
+    }
+  });
+});
+</script>
+
     <table class="tree">
         <thead>
             <tr>
-                <th width="80%">name</th>
-                <th width="10%">mode</th>
+                <th width="30%">name</th>
+                <th width="15%">age</th>
+                <th width="45%">comment</th>
                 <th width="10%">size</th>
             </tr>
         </thead>
@@ -37,6 +57,7 @@
                 </td>
                 <td></td>
                 <td></td>
+                <td></td>
             </tr>
             {% endif %}
             {% for file in files %}
@@ -48,7 +69,8 @@
                         {{ path('blob', {repo: repo, branch: branch, file: path ~ (file.type == "symlink" ? file.path : file.name)}) }}
                     {%- endif -%}
                 ">{{ file.name }}</a></td>
-                <td>{{ file.mode }}</td>
+                <td id="{{ file.hash }}_age"></td>
+                <td id="{{ file.hash }}_comment"></td>
                 <td>{% if file.size %}{{ (file.size / 1024) | number_format }} kb{% endif %}</td>
             </tr>
             {% endfor %}

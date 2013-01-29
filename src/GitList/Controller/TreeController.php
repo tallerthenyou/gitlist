@@ -34,6 +34,7 @@ class TreeController implements ControllerProviderInterface
                 'files'          => $files->output(),
                 'repo'           => $repo,
                 'branch'         => $branch,
+                'tree'           => $tree,
                 'path'           => $tree ? $tree . '/' : $tree,
                 'parent'         => $parent,
                 'breadcrumbs'    => $breadcrumbs,
@@ -112,6 +113,31 @@ class TreeController implements ControllerProviderInterface
           ->assert('repo', $app['util.routing']->getRepositoryRegex())
           ->assert('branch', '[\w-._\/]+')
           ->bind('archive');
+
+        $route->get('{repo}/treedetails/{branch}/{tree}/', $treeDetails = function($repo, $branch, $tree = '') use ($app) {
+            $repository = $app['git']->getRepository($app['git.repos'] . $repo);
+            if (!$branch) {
+                $branch = $repository->getHead();
+            }
+
+            $tree = $repository->getTree($tree ? "$branch:\"$tree\"/" : $branch);
+            $details = $tree->details();
+
+            // Create a JSON-response
+            $response = new Response(json_encode($details));
+            $response->headers->set('Content-Type', 'application/json');
+
+            return $response;
+        })->assert('repo', '[\w-._]+')
+          ->assert('branch', '[\w-._]+')
+          ->assert('tree', '.+')
+          ->bind('treedetails');
+
+        $route->get('{repo}/treedetails/{branch}/', function($repo, $branch) use ($app, $treeDetails) {
+            return $treeDetails($repo, $branch);
+        })->assert('repo', '[\w-._]+')
+          ->assert('branch', '[\w-._]+')
+          ->bind('branch');
 
         return $route;
     }
