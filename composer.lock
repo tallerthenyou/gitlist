@@ -6,13 +6,13 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/klaussilveira/gitter",
-                "reference": "1c9b6e4dde81d21acffe99d9f4559ed3bc59f947"
+                "url": "https://github.com/tallerthenyou/gitter",
+                "reference": "9a5694f96c3b7741fa4a8a88c478d8477a4dc470"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/klaussilveira/gitter/zipball/1c9b6e4dde81d21acffe99d9f4559ed3bc59f947",
-                "reference": "1c9b6e4dde81d21acffe99d9f4559ed3bc59f947",
+                "url": "https://github.com/tallerthenyou/gitter/zipball/9a5694f96c3b7741fa4a8a88c478d8477a4dc470",
+                "reference": "9a5694f96c3b7741fa4a8a88c478d8477a4dc470",
                 "shasum": ""
             },
             "require": {
@@ -616,6 +616,6 @@
     ],
     "minimum-stability": "dev",
     "stability-flags": {
-        "klaussilveira/gitter": 20
+        "tallerthenyou/gitter": 20
     }
 }
